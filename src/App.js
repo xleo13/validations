@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import Header from './components/Header'
+import Header from './components/Header';
+import FormInput from './components/FormInput';
+import RegistrationStore from './stores/RegistrationStore';
+
 
 class App extends Component {
   constructor(props){
     super(props)
     this.state={
-      registration: {
-        firstName:'',
-        lastName:'',
-        email:'',
-        password:''
-      }
+      registration: RegistrationStore.getFields(),
+      errors: {}
     }
   }
 
@@ -23,10 +22,20 @@ class App extends Component {
     })
   }
 
-  handleSubmit(event){
-    event.preventDefault()
-    console.log(this.state.registration)
+  validate(){
+    RegistrationStore.validate()
+    this.setState({errors: RegistrationStore.getErrors()})
   }
+
+  handleSubmit(event){
+      event.preventDefault()
+      this.validate()
+      console.log(this.state.registration)
+    }
+
+    isValid(){
+      return Object.keys(this.state.errors).length ===0
+    }
 
   render() {
     return (
@@ -37,82 +46,59 @@ class App extends Component {
             <div className='col-xs-6 col-xs-offset-3'>
               <div className='panel panel-default'>
                 <div className='panel-body'>
+              { !this.isValid() &&
+                <div className='alert alert-danger'>
+                  Please verify that all fields are filled in below.
+                </div>
+              }
                   <h3>Registration</h3>
                   <form onSubmit={this.handleSubmit.bind(this)}>
                     <div className='row'>
                       <div className='col-xs-12'>
-                        <div className='form-group'> 
-                          <label 
-                            htmlFor='firstName'
-                            className='control-label'
-                          >
-                            First Name
-                          </label>
-                          <input
-                            name='firstName'
-                            value={this.state.registration.firstName}
-                            onChange={this.handleChange.bind(this)}
-                            className='form-control'
-                          />
-                        </div>
+
+                        <FormInput
+                        name= 'firstName'
+                        label= 'First Name'
+                        value= {this.state.registration.firstName}
+                        onChange= {this.handleChange.bind(this)}
+                        errors= {this.state.errors.firstName}
+                        />
                       </div>
                     </div>
 
                     <div className='row'>
                       <div className='col-xs-12'>
-                        <div className='form-group'>
-                          <label 
-                            htmlFor='lastName'
-                            className='control-label'
-                          >
-                            Last Name
-                          </label>
-                          <input
-                            name='lastName'
-                            value={this.state.registration.lastName}
-                            onChange={this.handleChange.bind(this)}
-                            className='form-control'
-                          />
-                        </div>
+                        <FormInput
+                        name= 'lastName'
+                        label= 'Last Name'
+                        value= {this.state.registration.lastName}
+                        onChange= {this.handleChange.bind(this)}
+                        errors= {this.state.errors.lastName}
+                        />
+                      </div>
+                    </div>
+
+                    <div className='row'>
+                        <div className='col-xs-12'>
+                        <FormInput
+                        name= 'email'
+                        label= 'Email'
+                        value= {this.state.registration.email}
+                        onChange= {this.handleChange.bind(this)}
+                        errors= {this.state.errors.email}
+                        />
                       </div>
                     </div>
 
                     <div className='row'>
                       <div className='col-xs-12'>
-                        <div className='form-group'>
-                          <label 
-                            htmlFor='email'
-                            className='control-label'
-                          >
-                            Email
-                          </label>
-                          <input
-                            name='email'
-                            value={this.state.registration.email}
-                            onChange={this.handleChange.bind(this)}
-                            className='form-control'
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className='row'>
-                      <div className='col-xs-12'>
-                        <div className='form-group'>
-                          <label 
-                            htmlFor='password'
-                            className='control-label'
-                          >
-                            Password
-                          </label>
-                          <input
-                            type='password'
-                            name='password'
-                            value={this.state.registration.password}
-                            onChange={this.handleChange.bind(this)}
-                            className='form-control'
-                          />
-                        </div>
+                      <FormInput
+                        name= 'password'
+                        label= 'Password'
+                        value= {this.state.registration.password}
+                        onChange= {this.handleChange.bind(this)}
+                        errors= {this.state.errors.password}
+                        />
                       </div>
                     </div>
 
