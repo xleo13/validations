@@ -35,8 +35,7 @@ class RegistrationStore{
     }
 
     validatePassword(fieldName){
-      let alphaNumericChecker = /^[0-9a-zA-Z]+$/;
-      if(this.fields[fieldName].match(alphaNumericChecker)){
+      if(!this.fields[fieldName].match(/[0-9]/||/[a-z]/||/[A-Z]/)){
         this.addError(fieldName, 'Password must contain a combination of letters and numbers')
       }
       if(this.fields[fieldName].length <= 8 ){
