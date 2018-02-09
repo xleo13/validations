@@ -35,12 +35,14 @@ class RegistrationStore{
     }
 
     validatePassword(fieldName){
-      if(!this.fields[fieldName].match(/[0-9]/||/[a-z]/||/[A-Z]/)){
-        this.addError(fieldName, 'Password must contain a combination of letters and numbers')
+      if(this.fields[fieldName] === ''){
+        this.addError(fieldName, 'Password must have lowercase, uppercase and a number and 8 Characters long')
       }
       if(this.fields[fieldName].length <= 8 ){
         this.addError(fieldName, 'Password must contain 8 or more Characters')
-      }
+      } else if (!this.fields[fieldName].match(/[0-9]/||/[a-z]/||/[A-Z]/)) {
+        this.addError(fieldName, 'Password must have lowercase, uppercase and a number')
+      } 
     }
 
   addError(fieldName, message){
